@@ -1,23 +1,49 @@
-import { Counter } from "../types/counter.types";
+import { Counter, UpdateCounter } from "../types/counter.types";
+import { v4 as uuidv4 } from "uuid";
 
-let counter: Counter = {
-  value: 0,
+let counters: Array<Counter> = [];
+
+const create = (): Counter => {
+  const createdCounter = {
+    id: uuidv4(),
+    value: 0,
+  };
+
+  counters.push(createdCounter);
+
+  return createdCounter;
 };
 
-const getCounter = (): Counter => {
-  return counter;
+const list = (): Array<Counter> => {
+  return counters;
 };
 
-const incrementCounter = (): void => {
-  counter.value++;
+const get = (id: string): Counter | undefined => {
+  return counters.find((counter) => counter.id === id);
 };
 
-const decrementCounter = (): void => {
-  counter.value--;
+const update = (
+  id: string,
+  updateCounter: UpdateCounter,
+): Counter | undefined => {
+  const counterToUpdate = counters.find((counter) => counter.id === id);
+  if (!counterToUpdate) {
+    return undefined;
+  }
+
+  counterToUpdate.value = updateCounter.value;
+
+  return counterToUpdate;
+};
+
+const remove = (id: string): void => {
+  counters = counters.filter((counter) => counter.id !== id);
 };
 
 export default {
-  getCounter,
-  incrementCounter,
-  decrementCounter,
+  create,
+  list,
+  get,
+  update,
+  remove,
 };
