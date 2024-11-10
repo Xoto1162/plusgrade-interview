@@ -1,5 +1,6 @@
-import { Counter, UpdateCounter } from "../types/counter.types";
+import { Counter } from "../types/counter.types";
 import { v4 as uuidv4 } from "uuid";
+import { UpdateCounterDto } from "../dto/counter.dto";
 
 let counters: Array<Counter> = [];
 
@@ -24,7 +25,7 @@ const get = (id: string): Counter | undefined => {
 
 const update = (
   id: string,
-  updateCounter: UpdateCounter,
+  updateCounter: UpdateCounterDto,
 ): Counter | undefined => {
   const counterToUpdate = counters.find((counter) => counter.id === id);
   if (!counterToUpdate) {

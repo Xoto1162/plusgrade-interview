@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "../libs/decorators/controller.decorators";
-import { Counter, UpdateCounter } from "../types/counter.types";
+import { Counter } from "../types/counter.types";
+import { UpdateCounterDto } from "../dto/counter.dto";
+import { validate } from "../libs/validators/validator";
 
 @Controller("counters")
 export class CounterController {
@@ -22,9 +24,12 @@ export class CounterController {
   }
 
   @Put(":id")
-  public update(req: Request, res: Response): Counter | undefined {
+  public async update(
+    req: Request,
+    res: Response,
+  ): Promise<Counter | undefined> {
     const id: string = req.params.id;
-    const updateCounter: UpdateCounter = req.body;
+    const updateCounter = await validate(req.body, UpdateCounterDto);
 
     return counterService.update(id, updateCounter);
   }
