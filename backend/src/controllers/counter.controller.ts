@@ -7,9 +7,9 @@ import {
   Post,
   Put,
 } from "../libs/decorators/controller.decorators";
-import { Counter } from "../types/counter.types";
 import { UpdateCounterDto } from "../dto/counter.dto";
 import { validate } from "../libs/validators/request.validators";
+import { Counter } from "../entities/counter.entity";
 
 @Controller("counters")
 export class CounterController {

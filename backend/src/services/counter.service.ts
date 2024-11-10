@@ -1,14 +1,10 @@
-import { Counter } from "../types/counter.types";
-import { v4 as uuidv4 } from "uuid";
 import { UpdateCounterDto } from "../dto/counter.dto";
+import { Counter } from "../entities/counter.entity";
 
 let counters: Array<Counter> = [];
 
 const create = (): Counter => {
-  const createdCounter = {
-    id: uuidv4(),
-    value: 0,
-  };
+  const createdCounter = new Counter();
 
   counters.push(createdCounter);
 
