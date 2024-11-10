@@ -9,7 +9,7 @@ import {
 } from "../libs/decorators/controller.decorators";
 import { Counter } from "../types/counter.types";
 import { UpdateCounterDto } from "../dto/counter.dto";
-import { validate } from "../libs/validators/validator";
+import { validate } from "../libs/validators/request.validators";
 
 @Controller("counters")
 export class CounterController {
