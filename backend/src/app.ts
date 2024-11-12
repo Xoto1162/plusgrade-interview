@@ -1,4 +1,4 @@
-import express, { Express, Handler, Request, Response } from "express";
+import express, { Express, Handler } from "express";
 import controllers from "./controllers";
 import cors from "cors";
 import { IRoute, MetadataKeys } from "./libs/decorators/controller.decorators";
@@ -26,21 +26,36 @@ class App {
         MetadataKeys.ROUTES,
         controllerClass,
       );
+      const controllerMiddlewares: Array<Handler> =
+        Reflect.getMetadata(MetadataKeys.MIDDLEWARES, controllerClass) ?? [];
 
       const router = express.Router();
 
       for (const { method, path, handlerName } of routes) {
-        router[method](`/${path}`, async (request, response, next) => {
-          try {
-            response.send(
-              await controllerInstance[String(handlerName)].bind(
-                controllerInstance,
-              )(request, response, next),
-            );
-          } catch (error) {
-            next(error);
-          }
-        });
+        const routeHandler = controllerInstance[String(handlerName)];
+        const routeMiddlewares =
+          Reflect.getMetadata(MetadataKeys.MIDDLEWARES, routeHandler) ?? [];
+
+        // Equivalent to calling express route methods
+        // i.e: router.get(path, ...middlewares, (req, res, next) => {...})
+        router[method](
+          `/${path}`,
+          ...controllerMiddlewares,
+          ...routeMiddlewares,
+          async (request, response, next) => {
+            try {
+              response.send(
+                await routeHandler.bind(controllerInstance)(
+                  request,
+                  response,
+                  next,
+                ),
+              );
+            } catch (error) {
+              next(error);
+            }
+          },
+        );
       }
 
       this.instance.use(`/${basePath}`, router);

@@ -14,19 +14,19 @@ import { Counter } from "../entities/counter.entity";
 @Controller("counters")
 export class CounterController {
   @Get()
-  public listAll(req: Request, res: Response): Array<Counter> {
+  public listAll(_req: Request, _res: Response): Array<Counter> {
     return counterService.list();
   }
 
   @Post()
-  public create(req: Request, res: Response): Counter {
+  public create(_req: Request, _res: Response): Counter {
     return counterService.create();
   }
 
   @Put(":id")
   public async update(
     req: Request,
-    res: Response,
+    _res: Response,
   ): Promise<Counter | undefined> {
     const id: string = req.params.id;
     const updateCounter = await validate(req.body, UpdateCounterDto);
@@ -35,7 +35,7 @@ export class CounterController {
   }
 
   @Delete(":id")
-  public delete(req: Request, res: Response): void {
+  public delete(req: Request, _res: Response): void {
     const id: string = req.params.id;
 
     return counterService.remove(id);
